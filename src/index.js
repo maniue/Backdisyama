@@ -52,7 +52,7 @@ app.post('/api/login', async (req, res) => {
 
     const token = jwt.sign({ userId: user._id }, 'secretKey', { expiresIn: '1h' });
 
-    res.json({ token, redirect: '/api/v1/dashboard' });
+    res.json({ token, redirect: '/api/v1/dashboard', username });
 });
 
 // Rutas API
