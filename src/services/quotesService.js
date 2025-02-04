@@ -221,7 +221,6 @@ const updateDiscount = async (quoteId, descuentoPorcentaje) => {
   return updatedQuote;
 };
 
-module.exports = { changeQuoteStatus };
 
 module.exports = {
   createQuote,
