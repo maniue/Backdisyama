@@ -23,7 +23,7 @@ const quotesSchema = new mongoose.Schema({
     default: 0,
     set: value => parseFloat(value.toFixed(2))  // Redondear a 2 decimales
   },
-  descuentoProcentaje: {type: Number, default: 0},
+  descuentoPorcentaje: {type: Number, default: 0},
   totalConDescuento: {type: Number, default: 0},
   quotedRepuestos: [
     {

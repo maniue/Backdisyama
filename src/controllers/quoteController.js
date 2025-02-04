@@ -164,14 +164,14 @@ const updateQuotedRepuesto = async (req, res) => {
   const updateDiscount = async (req, res) => {
     try {
       const { quoteId } = req.params;
-      const { descuentoProcentaje } = req.body;
+      const { descuentoPorcentaje } = req.body;
   
-      if (descuentoProcentaje === undefined) {
+      if (descuentoPorcentaje === undefined) {
         return res.status(400).json({ message: 'Descuento porcentaje es requerido.' });
       }
   
       // Llamada al servicio para actualizar el descuento y calcular el total
-      const updatedQuote = await quotesService.updateDiscount(quoteId, descuentoProcentaje);
+      const updatedQuote = await quotesService.updateDiscount(quoteId, descuentoPorcentaje);
   
       if (!updatedQuote) {
         return res.status(404).json({ message: 'Cotización no encontrada.' });

@@ -215,7 +215,7 @@ const changeQuoteStatus = async (quoteId, status) => {
   }
 };
 
-const updateDiscount = async (quoteId, descuentoProcentaje) => {
+const updateDiscount = async (quoteId, descuentoPorcentaje) => {
   // Encuentra la cotización por ID
   const quote = await Quotes.findById(quoteId);
 
@@ -224,10 +224,10 @@ const updateDiscount = async (quoteId, descuentoProcentaje) => {
   }
 
   // Actualiza el descuento y recalcula el total
-  quote.descuentoProcentaje = descuentoProcentaje;
+  quote.descuentoPorcentaje = descuentoPorcentaje;
 
   // Recalcular total con descuento
-  const discountAmount = (quote.totalQuote * descuentoProcentaje) / 100;
+  const discountAmount = (quote.totalQuote * descuentoPorcentaje) / 100;
   quote.totalConDescuento = parseFloat((quote.totalQuote - discountAmount).toFixed(2));
 
   // Guarda los cambios
