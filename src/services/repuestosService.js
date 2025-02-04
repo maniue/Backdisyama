@@ -6,13 +6,19 @@ const createRepuesto = async (repuestoData) => {
 };
 const getRepuestoByCode = async (code) => {
   try {
-    return await Repuesto.findOne({ code }); // Busca un repuesto con el código proporcionado
+    return await Repuesto.findOne({ code });
   } catch (error) {
     throw new Error("Error buscando repuesto por código");
   }
 };
 
-const getRepuestoByDetails = async ({ numOrden, category, nombreRepuesto, brand, fabricante }) => {
+const getRepuestoByDetails = async ({
+  numOrden,
+  category,
+  nombreRepuesto,
+  brand,
+  fabricante,
+}) => {
   return await Repuesto.findOne({
     numOrden,
     category,
@@ -22,11 +28,9 @@ const getRepuestoByDetails = async ({ numOrden, category, nombreRepuesto, brand,
   });
 };
 
-
 const getAllRepuestos = async (filter = {}) => {
   try {
-    // Si se pasa un filtro, Mongoose lo usará en la búsqueda
-    const repuestos = await Repuesto.find(filter); // `Repuesto` es el modelo de Mongoose
+    const repuestos = await Repuesto.find(filter);
     return repuestos;
   } catch (error) {
     throw new Error("Error al obtener los repuestos: " + error.message);

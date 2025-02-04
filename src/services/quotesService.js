@@ -82,13 +82,10 @@ const addRepuestoIfNotExists = async (quoteId, newRepuesto) => {
     if (!repuesto) {
       throw new Error("Repuesto not found");
     }
-
-    // Verificar si la cantidad solicitada es mayor que la cantidad disponible en el repuesto
     if (repuesto.cantidad < newRepuesto.cantidad) {
       throw new Error("No existe inventario para la cantidad ingresada");
     }
 
-    // Verificar si el repuesto ya está en el array quotedRepuestos del Quote
     const repuestoExists = quote.quotedRepuestos.some(
       (item) =>
         item.repuestoId &&
@@ -99,7 +96,6 @@ const addRepuestoIfNotExists = async (quoteId, newRepuesto) => {
       throw new Error("Repuesto ya existe en la cotización");
     }
 
-    // Si no existe, agregar el nuevo repuesto al array quotedRepuestos
     quote.quotedRepuestos.push({
       repuestoId: new ObjectId(newRepuesto.repuestoId),
       cantidad: newRepuesto.cantidad,
@@ -110,27 +106,21 @@ const addRepuestoIfNotExists = async (quoteId, newRepuesto) => {
       ganancia: newRepuesto.ganancia,
       gananciaTotal: newRepuesto.gananciaTotal,
       total: newRepuesto.total,
-      brand: newRepuesto.brand
+      brand: newRepuesto.brand,
     });
 
-    // Calcular el subtotal
     const subtotal = quote.quotedRepuestos.reduce(
       (acc, repuesto) => acc + repuesto.total,
       0
     );
 
-    // Calcular el ISV (por ejemplo, 15%)
     const isv = subtotal * 0.15;
 
-    // Calcular el totalQuote sumando el subtotal más el ISV
     const totalQuote = subtotal + isv;
-
-    // Actualizar los campos subtotal, isv y totalQuote
     quote.subTotal = subtotal;
     quote.isv = isv;
     quote.totalQuote = totalQuote;
 
-    // Guardar el documento actualizado de Quotes
     await quote.save();
 
     return quote;
@@ -141,38 +131,30 @@ const addRepuestoIfNotExists = async (quoteId, newRepuesto) => {
 
 const deleteQuotedRepuesto = async (quoteId, quotedRepuestoId) => {
   try {
-    // Encuentra el documento Quote por su _id
     const quote = await Quotes.findById(quoteId);
 
     if (!quote) {
       throw new Error("Quote not found");
     }
 
-    // Filtra el array quotedRepuestos para eliminar el subdocumento que tiene el _id proporcionado
     const updatedQuotedRepuestos = quote.quotedRepuestos.filter(
       (repuesto) => repuesto._id.toString() !== quotedRepuestoId
     );
 
-    // Actualiza el array quotedRepuestos con los datos actualizados
     quote.quotedRepuestos = updatedQuotedRepuestos;
 
-    // Recalcular el subtotal
     const subtotal = updatedQuotedRepuestos.reduce((total, repuesto) => {
       return total + repuesto.total;
     }, 0);
 
-    // Calcular el ISV (por ejemplo, 15%)
     const isv = subtotal * 0.15;
 
-    // Calcular el totalQuote sumando el subtotal más el ISV
     const totalQuote = subtotal + isv;
 
-    // Actualizar los campos subtotal, isv y totalQuote de la cotización
     quote.subTotal = subtotal;
     quote.isv = isv;
     quote.totalQuote = totalQuote;
 
-    // Guardar el documento actualizado de Quotes
     await quote.save();
 
     return quote;
@@ -185,28 +167,31 @@ const changeQuoteStatus = async (quoteId, status) => {
   try {
     const quote = await Quotes.findById(quoteId);
     if (!quote) {
-      throw new Error('Quote not found');
+      throw new Error("Quote not found");
     }
 
-    // Si el estado es "SOLD", restamos los repuestos
-    if (status === 'SOLD') {
+    if (status === "SOLD") {
       for (let repuesto of quote.quotedRepuestos) {
-        const repuestoInInventory = await Repuestos.findById(repuesto.repuestoId);
+        const repuestoInInventory = await Repuestos.findById(
+          repuesto.repuestoId
+        );
         if (!repuestoInInventory) {
-          throw new Error(`Repuesto ${repuesto.nombreRepuesto} no encontrado en inventario`);
+          throw new Error(
+            `Repuesto ${repuesto.nombreRepuesto} no encontrado en inventario`
+          );
         }
-        
-        // Restamos la cantidad de repuestos disponibles en el inventario
+
         if (repuestoInInventory.cantidad >= repuesto.cantidad) {
           repuestoInInventory.cantidad -= repuesto.cantidad;
           await repuestoInInventory.save();
         } else {
-          throw new Error(`No hay suficiente inventario para el repuesto ${repuesto.nombreRepuesto}`);
+          throw new Error(
+            `No hay suficiente inventario para el repuesto ${repuesto.nombreRepuesto}`
+          );
         }
       }
     }
 
-    // Actualizamos el estado de la cotización
     quote.status = status;
     await quote.save();
 
@@ -217,22 +202,19 @@ const changeQuoteStatus = async (quoteId, status) => {
 };
 
 const updateDiscount = async (quoteId, descuentoPorcentaje) => {
-  // Encuentra la cotización por ID
   const quote = await Quotes.findById(quoteId);
 
   if (!quote) {
     return null;
   }
 
-  // Actualiza el descuento y recalcula el total
   quote.descuentoPorcentaje = descuentoPorcentaje;
-
-  // Recalcular total con descuento
   const discountAmount = (quote.totalQuote * descuentoPorcentaje) / 100;
-  quote.totalConDescuento = parseFloat((quote.totalQuote - discountAmount).toFixed(2));
+  quote.totalConDescuento = parseFloat(
+    (quote.totalQuote - discountAmount).toFixed(2)
+  );
 
-  // Guarda los cambios
-  quote.updatedAt = new Date(); // Actualiza la fecha de modificación
+  quote.updatedAt = new Date();
 
   const updatedQuote = await quote.save();
 
@@ -251,5 +233,5 @@ module.exports = {
   addRepuestoIfNotExists,
   deleteQuotedRepuesto,
   changeQuoteStatus,
-  updateDiscount
+  updateDiscount,
 };

@@ -1,8 +1,6 @@
 const swaggerJSDoc = require("swagger-jsdoc")
 const swaggerUi = require("swagger-ui-express")
 
-
-//Metadata info about API
 const options = {
     definition: {
         openapi: "3.0.0",
@@ -11,7 +9,6 @@ const options = {
     apis: ["src/v1/routes/qaseReportRoutes.js"],
 };
 
-//Docs en JSON format
 const swaggerSpec = swaggerJSDoc(options);
 
 const swaggerDocs = (app, port) => {

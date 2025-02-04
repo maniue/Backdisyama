@@ -1,18 +1,22 @@
-// controllers/providerController.js
-const providerService = require("../services/providersService")
+const providerService = require("../services/providersService");
 
-// Crear un proveedor
 const createProvider = async (req, res) => {
   try {
     const { name, service, contact } = req.body;
-
-    // Validar campos requeridos
     if (!name || !service || !contact) {
       return res.status(400).json({ message: "All fields are required." });
     }
-
-    const newProvider = await providerService.createProvider({ name, service, contact });
-    res.status(201).json({ message: "Provider created successfully", provider: newProvider });
+    const newProvider = await providerService.createProvider({
+      name,
+      service,
+      contact,
+    });
+    res
+      .status(201)
+      .json({
+        message: "Provider created successfully",
+        provider: newProvider,
+      });
   } catch (error) {
     console.error("Error creating provider:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -20,34 +24,40 @@ const createProvider = async (req, res) => {
 };
 
 const getProviders = async (req, res) => {
-    try {
-      const providers = await providerService.getAllProviders();
-      res.status(200).json({ providers });
-    } catch (error) {
-      console.error("Error fetching providers:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  };
+  try {
+    const providers = await providerService.getAllProviders();
+    res.status(200).json({ providers });
+  } catch (error) {
+    console.error("Error fetching providers:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
-  // Actualizar un proveedor
 const updateProvider = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, service, contact } = req.body;
 
-    const updatedProvider = await providerService.updateProvider(id, { name, service, contact });
+    const updatedProvider = await providerService.updateProvider(id, {
+      name,
+      service,
+      contact,
+    });
     if (!updatedProvider) {
       return res.status(404).json({ message: "Provider not found" });
     }
-
-    res.status(200).json({ message: "Provider updated successfully", provider: updatedProvider });
+    res
+      .status(200)
+      .json({
+        message: "Provider updated successfully",
+        provider: updatedProvider,
+      });
   } catch (error) {
     console.error("Error updating provider:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-// Eliminar un proveedor
 const deleteProvider = async (req, res) => {
   try {
     const { id } = req.params;
