@@ -215,6 +215,29 @@ const changeQuoteStatus = async (quoteId, status) => {
   }
 };
 
+const updateDiscount = async (quoteId, descuentoProcentaje) => {
+  // Encuentra la cotización por ID
+  const quote = await Quotes.findById(quoteId);
+
+  if (!quote) {
+    return null;
+  }
+
+  // Actualiza el descuento y recalcula el total
+  quote.descuentoProcentaje = descuentoProcentaje;
+
+  // Recalcular total con descuento
+  const discountAmount = (quote.totalQuote * descuentoProcentaje) / 100;
+  quote.totalConDescuento = parseFloat((quote.totalQuote - discountAmount).toFixed(2));
+
+  // Guarda los cambios
+  quote.updatedAt = new Date(); // Actualiza la fecha de modificación
+
+  const updatedQuote = await quote.save();
+
+  return updatedQuote;
+};
+
 module.exports = { changeQuoteStatus };
 
 module.exports = {
@@ -227,4 +250,5 @@ module.exports = {
   addRepuestoIfNotExists,
   deleteQuotedRepuesto,
   changeQuoteStatus,
+  updateDiscount
 };

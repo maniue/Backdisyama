@@ -11,6 +11,7 @@ router.put('/:id/quotedRepuestos/:repuestoId', quoteController.updateQuotedRepue
 router.post('/:quoteId/addRepuesto', quoteController.addRepuestoIfNotExists);
 router.delete('/:quoteId/quotedRepuesto/:quotedRepuestoId', quoteController.deleteQuotedRepuesto);
 router.patch('/:quoteId/status', quoteController.updateQuoteStatus);
+router.put('/update-discount/:quoteId', quoteController.updateDiscount);
 
 
 

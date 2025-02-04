@@ -69,6 +69,8 @@ const getQuoteById = async (req, res) => {
 };
 
 const updateQuote = async (req, res) => {
+  console.log(req.body)
+
   try {
     const part = await quotesService.updateQuote(req.params.id, req.body);
     if (!part) {
@@ -77,6 +79,7 @@ const updateQuote = async (req, res) => {
     res.status(200).send(part);
   } catch (error) {
     res.status(500).send({ message: error.message });
+    console.log(error)
   }
 };
 
@@ -95,7 +98,6 @@ const deleteQuote = async (req, res) => {
 const updateQuotedRepuesto = async (req, res) => {
     const { id, repuestoId } = req.params; // `id` es el _id del documento Quotes
     const updatedRepuesto = req.body; // Datos a actualizar en el subdocumento
-  
     try {
       const updatedQuote = await quotesService.updateQuotedRepuestoById(id, repuestoId, updatedRepuesto);
       res.json(updatedQuote);
@@ -159,6 +161,28 @@ const updateQuotedRepuesto = async (req, res) => {
       });
     }
   };
+  const updateDiscount = async (req, res) => {
+    try {
+      const { quoteId } = req.params;
+      const { descuentoProcentaje } = req.body;
+  
+      if (descuentoProcentaje === undefined) {
+        return res.status(400).json({ message: 'Descuento porcentaje es requerido.' });
+      }
+  
+      // Llamada al servicio para actualizar el descuento y calcular el total
+      const updatedQuote = await quotesService.updateDiscount(quoteId, descuentoProcentaje);
+  
+      if (!updatedQuote) {
+        return res.status(404).json({ message: 'Cotización no encontrada.' });
+      }
+  
+      return res.status(200).json(updatedQuote);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Error al actualizar el descuento.' });
+    }
+  };
   
 module.exports = {
   createQuote,
@@ -169,5 +193,6 @@ module.exports = {
   updateQuotedRepuesto,
   addRepuestoIfNotExists,
   deleteQuotedRepuesto,
-  updateQuoteStatus
+  updateQuoteStatus,
+  updateDiscount
 };
