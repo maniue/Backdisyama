@@ -110,6 +110,7 @@ const addRepuestoIfNotExists = async (quoteId, newRepuesto) => {
       ganancia: newRepuesto.ganancia,
       gananciaTotal: newRepuesto.gananciaTotal,
       total: newRepuesto.total,
+      brand: newRepuesto.brand
     });
 
     // Calcular el subtotal
