@@ -49,8 +49,8 @@ app.post("/api/login", async (req, res) => {
   const token = jwt.sign({ userId: user._id }, "secretKey", {
     expiresIn: "1h",
   });
-  const name = user.firstName + " " + user.lastName; 
-  res.json({ token, redirect: "/api/v1/dashboards", username, name });
+  const nameCon = user.firstName + " " + user.lastName; 
+  res.json({ token, redirect: "/api/v1/dashboards", username, nameCon });
 });
 
 app.use("/api/v1/", v1inventoryRoutes);
