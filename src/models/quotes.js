@@ -28,6 +28,7 @@ const quotesSchema = new mongoose.Schema({
       repuestoId: { type: mongoose.Schema.Types.ObjectId, ref: 'Repuestos'},
       cantidad: { type: Number },
       nombreRepuesto: { type: String },
+      brand: {type: String},
       precioUnitarioLempira: { 
         type: Number, 
         set: value => parseFloat(value.toFixed(2))  // Redondear a 2 decimales

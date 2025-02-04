@@ -13,7 +13,7 @@ const repuestosSchema = new mongoose.Schema({
   category: { type: String, required: true },
   cantidad: { type: Number, required: true },
   cantidadTienda: {type: Number, required: true},
-  cantidadBodega: {type: Number, required: true},
+  cantidadBodega: {type: Number},
   orrden: [
     {
       numOrden: {type: String, required: true},
