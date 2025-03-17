@@ -6,6 +6,9 @@ router
   .post("/createClient", ClientController.createClient)
   .get("/getAllClients", ClientController.getClients)
   .put("/:id", ClientController.updateClient)
-  .get("/:id", ClientController.getClientById);
+  .get("/:id", ClientController.getClientById)
+  .delete("/:id", ClientController.deleteClient);
+
+
 
 module.exports = router;

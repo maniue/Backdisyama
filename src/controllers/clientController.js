@@ -93,6 +93,20 @@ class ClientController {
       return res.status(500).json({ message: error.message });
     }
   }
+  static async deleteClient(req, res) {
+    const clientId = req.params.id;
+
+    try {
+      const deletedClient = await ClientService.deleteClientById(clientId);
+
+      return res.status(200).json({
+        message: "Client deleted successfully",
+        client: deletedClient,
+      });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
 }
 
 module.exports = ClientController;

@@ -69,6 +69,19 @@ class ClientService {
       throw new Error("Error fetching client: " + error.message);
     }
   }
+  static async deleteClientById(clientId) {
+    try {
+      const deletedClient = await Client.findByIdAndDelete(clientId);
+
+      if (!deletedClient) {
+        throw new Error("Client not found");
+      }
+
+      return deletedClient;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 module.exports = ClientService;
